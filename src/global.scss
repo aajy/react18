@@ -1,13 +1,27 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 a {
-  text-decoration: none;
+	text-decoration: none;
 }
 ul,
 ol,
 li {
-  list-style: none;
+	list-style: none;
+}
+.btnTop {
+	position: fixed;
+	width: 200px;
+	height: 200px;
+	border: 1px solid #333;
+	bottom: 100px;
+	right: 100px;
+	z-index: 5;
+	opacity: 0;
+	transition: opacity 0.5s;
+	&.on {
+		opacity: 1;
+	}
 }
