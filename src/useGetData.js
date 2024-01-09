@@ -1,34 +1,49 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const checkPromiseStatus = (promise) => {
+const checkPromiseStatus = (response) => {
+	console.log(response);
 	let status = 'pending';
 	let result;
+	console.log({ status, result });
 
-	//인수로 전달된 promise의 상태에 따라 상태와 value값을 각각 변수에 담아줌.
-	const setPromise = promise
-		.then((value) => {
-			status = 'fulfiled';
-			result = value;
-		})
-		.catch((error) => {
-			status = 'rejected';
-			result = error;
-		});
-	//
-	return () => {
-		if (status === 'pending') {
-		} else if (status === 'fulfiled') {
-		} else if (status === 'rejected') {
-		} else throw new Error('Unknown Statue');
-	};
+	if (response.ok) {
+		status = 'fulfilled';
+		result = response;
+		console.log({ status, result });
+	} else {
+		status = 'rejected';
+		result = 'error';
+		console.log({ status, result });
+	}
+
+	if (status === 'penidng') throw new Error('Still Loading');
+	if (status === 'fulfilled') {
+		return result.json();
+	}
+	if (status === 'rejected') throw result;
 };
 
-const useGetData = (url) => {
+function useGetData(url) {
 	const [Data, setData] = useState(null);
 
 	useEffect(() => {
-		const getData = async () => {};
-	}, []);
-};
+		const getData = async () => {
+			const promise = await fetch(url);
+			console.log(
+				checkPromiseStatus(promise).then((json) => {
+					console.log(json);
+					setData(json);
+				})
+			);
 
-export default getData;
+			//const promiseStatus = checkPromiseStatus(promise);
+			//console.log(promiseStatus);
+		};
+
+		getData();
+	}, [url]);
+
+	return Data;
+}
+
+export default useGetData;
